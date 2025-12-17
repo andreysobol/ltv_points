@@ -191,7 +191,7 @@ def main():
         w3.is_connected() if hasattr(w3, "is_connected") else w3.isConnected()
     )
     if not is_connected:
-        raise RuntimeError("Cannot connect to RPC, check .env file")
+        raise RuntimeError("Cannot connect to RPC")
     
     # Get pilot_vault deployment block and address
     print("Reading deployment blocks...")

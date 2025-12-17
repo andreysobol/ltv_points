@@ -26,7 +26,7 @@ def compare_state_and_onchain_data(
 
     w3 = Web3(Web3.HTTPProvider(get_rpc()))
     if not w3.is_connected():
-        pytest.skip("Cannot connect to RPC, check .env file")
+        pytest.skip("Cannot connect to RPC")
 
     for i in range(tests_amount):
         state_file = get_state_file(i)
