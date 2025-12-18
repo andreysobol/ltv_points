@@ -63,8 +63,6 @@ class TestPoints:
             * (point["end_block"] - event_block_number + 1)
         )
 
-        print("expected_points", expected_points)
-        print("point['points'][user]", point["points"][user])
         assert (
             expected_points == point["points"][user]
         ), f"Expected points for user {user} without nft but with balance change does not match calculated points: {expected_points} != {point['points'][user]}"
@@ -83,8 +81,6 @@ class TestPoints:
         balance = state["pilot_vault"]["start_state"][user]
         expected_points = balance * 1000 * (event_block_number - start_block)
         expected_points += balance * 1420 * (end_block - event_block_number + 1)
-        print("expected_points", expected_points)
-        print("point['points'][user]", point["points"][user])
         assert (
             expected_points == point["points"][user]
         ), f"Expected points for user {user} with nft balance change but without balance change does not match calculated points: {expected_points} != {point['points'][user]}"

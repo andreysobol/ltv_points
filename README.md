@@ -5,8 +5,8 @@ python3 find_deployment_blocks.py
 python3 find_daily_blocks.py
 python3 nft_events.py
 python3 pilot_vault_events.py
-python3 daily_states.py
-python3 daily_points.py
+python3 daily_states_v2.py
+python3 daily_points_v2.py
 python3 aggregate_daily_points.py
 ```
 

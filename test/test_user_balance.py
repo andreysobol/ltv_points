@@ -31,27 +31,26 @@ def get_users_data_from_state(state_data, state_key):
 def get_onchain_balances(w3, state_data, users_data, addresses, block_key):
     """Get balance from contract using balanceOf at specific block"""
     balances = {}
+    block = state_data[block_key] if block_key == "end_block" else state_data[block_key] - 1
     for user, _ in users_data.items():
         contract = w3.eth.contract(
             address=Web3.to_checksum_address(addresses["pilot_vault"]), abi=ERC20_ABI
         )
         balance = contract.functions.balanceOf(Web3.to_checksum_address(user)).call(
-            block_identifier=state_data[block_key]
+            block_identifier=block
         )
-        balances[user] = balance
+        balances[user.lower()] = balance
     return balances
 
 
 def validate_balances(users_data, onchain_data, state_data, block_key):
+    block = state_data[block_key] if block_key == "end_block" else state_data[block_key] - 1
     for user, balance in users_data.items():
         assert balance == onchain_data[user], (
-            f"Balance mismatch for user {user} at block {state_data[block_key]} (day {state_data['day_index']}):\n"
+            f"Balance mismatch for user {user} at block {block} (day {state_data['day_index']}):\n"
             f"  Stored balance: {balance}\n"
             f"  On-chain balance: {onchain_data[user]}\n"
             f"  Difference: {abs(balance - onchain_data[user])}"
-        )
-        print(
-            f"✓ Verified balance for user {user} at block {state_data[block_key]} (day {state_data['day_index']}): {balance}"
         )
 
 

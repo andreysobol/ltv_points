@@ -31,7 +31,7 @@ ERC721_ABI = [
         "name": "totalSupply",
         "outputs": [{"name": "totalSupply", "type": "uint256"}],
         "type": "function",
-    }
+    },
 ]
 
 
@@ -48,28 +48,40 @@ def get_onchain_data(w3, state_data, users_data, addresses, block_key):
     contract = w3.eth.contract(
         address=Web3.to_checksum_address(addresses["nft"]), abi=ERC721_ABI
     )
+    block = state_data[block_key] if block_key == "end_block" else state_data[block_key] - 1
     total_supply = contract.functions.totalSupply().call(
-        block_identifier=state_data[block_key]
+        block_identifier=block
     )
-    
+
     nft_owners = defaultdict(list)
 
     for i in range(1, total_supply + 1):
-        nft_owner = contract.functions.ownerOf(i).call(
-            block_identifier=state_data[block_key]
-        ).lower()
-        
+        nft_owner = (
+            contract.functions.ownerOf(i)
+            .call(block_identifier=block)
+            .lower()
+        )
+
         nft_owners[nft_owner].append(i)
-        
+
     return nft_owners
 
-def validate_nft_balance_and_ownership(users_data, onchain_data, state_data, w3, addresses):
-    users_data_items = list(users_data.items())
-    onchain_data_items = list(onchain_data.items())
-    assert len(users_data_items) == len(onchain_data_items), "Users data and onchain data length mismatch"
+
+def validate_nft_balance_and_ownership(
+    users_data, onchain_data, state_data, w3, addresses
+):
+    users_data_items = sorted(list(users_data.items()))
+    onchain_data_items = sorted(list(onchain_data.items()))
+    assert len(users_data_items) == len(
+        onchain_data_items
+    ), "Users data and onchain data length mismatch"
     for user_data, onchain_data in zip(users_data_items, onchain_data_items):
-        assert user_data[0] == onchain_data[0], "User data and onchain data user address mismatch"
-        assert user_data[1] == onchain_data[1], "User data and onchain data nft ids mismatch"
+        assert (
+            user_data[0] == onchain_data[0]
+        ), "User data and onchain data user address mismatch"
+        assert set(user_data[1]).intersection(onchain_data[1]) == set(
+            user_data[1]
+        ).union(onchain_data[1]), "User data and onchain data nft ids mismatch"
 
 
 def validate_nft_data(user_data, onchain_data, state_data, w3, addresses):
@@ -86,6 +98,7 @@ def test_nft_balance_end_state():
         lambda *args: get_onchain_data(*args, "end_block"),
         validate_nft_data,
     )
+
 
 def test_nft_balance_start_state():
     compare_state_and_onchain_data(
