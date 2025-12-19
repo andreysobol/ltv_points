@@ -20,28 +20,41 @@ ZERO_ADDRESS = "0x" + "0" * 40
 POINTS_PER_PILOT_VAULT_TOKEN = 1000
 POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT = (142 * 1000) // 100  # 1.42
 
+lp_balances_snapshot = {}
+
 type Points = int
+    
 
-
-def get_user_state_at_day(day_index, state_key):
-    state_file = f"data/states/{day_index}.json"
-    with open(state_file, "r") as f:
+def get_user_state(filename, state_key):
+    with open(filename, "r") as f:
         state = json.load(f)
 
     user_state = defaultdict(UserState)
     for address, nft in state["nft"][state_key].items():
         user_state[address.lower()].nft_ids = set(nft)
-    for address, balance in state["pilot_vault"][state_key].items():
-        user_state[address.lower()].balance = balance
+    for address, state in state["pilot_vault"][state_key].items():
+        user_state[address.lower()].balance = state["balance"]
+        user_state[address.lower()].last_positive_balance_update_block = state[
+            "last_positive_balance_update_block"
+        ]
+        user_state[address.lower()].last_negative_balance_update_block = state[
+            "last_negative_balance_update_block"
+        ]
     return user_state
+
+def get_user_state_at_day(day_index, state_key):
+    state_file = f"data/states/{day_index}.json"
+    return get_user_state(state_file, state_key)
+
 
 def give_points_for_user_state(user_state, points) -> Dict[str, Points]:
     for address, user_state in user_state.items():
+        balance_excluding_snapshot = max(0, user_state.balance - lp_balances_snapshot[address].balance)
         if len(user_state.nft_ids) == 0:
-            points[address.lower()] += user_state.balance * POINTS_PER_PILOT_VAULT_TOKEN
+            points[address.lower()] += balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN
         else:
             points[address.lower()] += (
-                user_state.balance * POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT
+                balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT
             )
     return points
 
@@ -74,6 +87,14 @@ def validate_end_state(day_index, result_user_balances):
         assert (
             result_user_balance[1].nft_ids == cached_user_balance[1].nft_ids
         ), f"User NFT IDs mismatch: {result_user_balance[1].nft_ids} != {cached_user_balance[1].nft_ids}"
+        assert (
+            result_user_balance[1].last_positive_balance_update_block
+            == cached_user_balance[1].last_positive_balance_update_block
+        ), f"User last positive balance update block mismatch: {result_user_balance[1].last_positive_balance_update_block} != {cached_user_balance[1].last_positive_balance_update_block}"
+        assert (
+            result_user_balance[1].last_negative_balance_update_block
+            == cached_user_balance[1].last_negative_balance_update_block
+        ), f"User last negative balance update block mismatch: {result_user_balance[1].last_negative_balance_update_block} != {cached_user_balance[1].last_negative_balance_update_block}"
     print(f"Verified end state for day {day_index}")
 
 
@@ -117,5 +138,5 @@ def process_points():
             indent=2,
         )
 
-
+lp_balances_snapshot = get_user_state("data/lp_balances_snapshot.json", "start_state")
 process_points()

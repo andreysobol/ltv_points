@@ -8,6 +8,8 @@ class UserState:
     def __init__(self, balance: int = 0, nft_ids: set[int] = None):
         self.balance = balance
         self.nft_ids = nft_ids if nft_ids is not None else set()
+        self.last_positive_balance_update_block = 0
+        self.last_negative_balance_update_block = 0
 
 
 def process_transfer_event(event, user_state) -> UserState:
@@ -16,8 +18,10 @@ def process_transfer_event(event, user_state) -> UserState:
     to_addr = event["args"]["to"].lower()
     if from_addr != ZERO_ADDRESS:
         user_state[from_addr].balance -= value
+        user_state[from_addr].last_negative_balance_update_block = event["blockNumber"]
     if to_addr != ZERO_ADDRESS:
         user_state[to_addr].balance += value
+        user_state[to_addr].last_positive_balance_update_block = event["blockNumber"]
     return user_state
 
 

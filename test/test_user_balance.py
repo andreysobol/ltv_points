@@ -25,6 +25,7 @@ def get_state_file(i):
 def get_users_data_from_state(state_data, state_key):
     """Pick a random user from pilot_vault.end_state"""
     pilot_vault_state = state_data.get("pilot_vault", {}).get(state_key, {})
+    pilot_vault_state = {address: state["balance"] for address, state in pilot_vault_state.items()}
     return pilot_vault_state
 
 
