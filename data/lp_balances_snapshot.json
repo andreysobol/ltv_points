@@ -88,9 +88,6 @@
       "0x693eeae27374b57673bb009e0faa88d908985a30": [
         66
       ],
-      "0x8485b2522425f5449fc1d2e54579f719fca88a02": [
-        3
-      ],
       "0x5f0ab641ec7240bd9f6885b6d8c15b177f1a8cae": [
         67
       ],
@@ -642,6 +639,9 @@
       ],
       "0x758e5c5c4dd4c6aa1384f0495656a4f7c2f49ec3": [
         4
+      ],
+      "0x8485b2522425f5449fc1d2e54579f719fca88a02": [
+        3
       ],
       "0xede66ed0fca1a9ebb052cce681c89d7535408ccf": [
         24
@@ -885,9 +885,6 @@
       "0x693eeae27374b57673bb009e0faa88d908985a30": [
         66
       ],
-      "0x8485b2522425f5449fc1d2e54579f719fca88a02": [
-        3
-      ],
       "0x5f0ab641ec7240bd9f6885b6d8c15b177f1a8cae": [
         67
       ],
@@ -1440,6 +1437,9 @@
       "0x758e5c5c4dd4c6aa1384f0495656a4f7c2f49ec3": [
         4
       ],
+      "0x8485b2522425f5449fc1d2e54579f719fca88a02": [
+        3
+      ],
       "0xede66ed0fca1a9ebb052cce681c89d7535408ccf": [
         24
       ],
@@ -1610,7 +1610,7 @@
         "last_negative_balance_update_block": 23799940
       },
       "0x6f9bb7e454f5b3eb2310343f0e99269dc2bb8a1d": {
-        "balance": 101169000000000000000,
+        "balance": 102819000000000000000,
         "last_positive_balance_update_block": 23922240,
         "last_negative_balance_update_block": 0
       },
@@ -1787,7 +1787,7 @@
         "last_negative_balance_update_block": 23799940
       },
       "0x6f9bb7e454f5b3eb2310343f0e99269dc2bb8a1d": {
-        "balance": 101169000000000000000,
+        "balance": 102819000000000000000,
         "last_positive_balance_update_block": 23922240,
         "last_negative_balance_update_block": 0
       },
