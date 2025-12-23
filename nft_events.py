@@ -74,8 +74,8 @@ def read_events_chunked(contract, start_block, end_block, chunk_size=10000):
     all_logs = []
     current_block = start_block
     
-    while current_block <= end_block:
-        chunk_end = min(current_block + chunk_size - 1, end_block)
+    while current_block < end_block:
+        chunk_end = min(current_block + chunk_size, end_block + 1)
         
         try:
             print(f"    Fetching logs from block {current_block} to {chunk_end}...")
@@ -96,7 +96,7 @@ def read_events_chunked(contract, start_block, end_block, chunk_size=10000):
                 print("Could not fetch events from block {current_block} to {chunk_end}")
                 sys.exit(1)
         
-        current_block = chunk_end + 1
+        current_block = chunk_end
     
     return all_logs
 
