@@ -5,14 +5,14 @@ python3 find_deployment_blocks.py
 python3 find_daily_blocks.py
 python3 nft_events.py
 python3 pilot_vault_events.py
-python3 daily_states.py
-python3 daily_points.py
+python3 daily_states_v2.py
+python3 daily_points_v2.py
 python3 aggregate_daily_points.py
 ```
 
 ## find_deployment_blocks.py
 
-This script identifies the deployment blocks for the NFT and Pilot Vault contracts on the Ethereum blockchain. It uses binary search to efficiently locate the exact block numbers where each contract was first deployed by checking for contract code existence at different block heights. The script reads contract addresses from `config.json` and RPC endpoint from `rpc.json`, then performs a binary search algorithm that checks whether contract code exists at various block numbers, narrowing down the search range until it finds the first block where the contract has code deployed. For each contract, it retrieves detailed block information including the block number, timestamp, datetime in UTC format, and block hash. The results are saved to `data/deployment_blocks.json` with complete metadata for both contracts. This deployment block information is crucial as it serves as the starting point for all subsequent calculations, ensuring that event processing begins from the moment contracts were actually deployed rather than from an arbitrary block number. The script handles errors gracefully, providing clear feedback if contracts cannot be found or if there are connection issues with the RPC provider.
+This script identifies the deployment blocks for the NFT and Pilot Vault contracts on the Ethereum blockchain. It uses binary search to efficiently locate the exact block numbers where each contract was first deployed by checking for contract code existence at different block heights. The script reads contract addresses from `config.json` and RPC endpoint, then performs a binary search algorithm that checks whether contract code exists at various block numbers, narrowing down the search range until it finds the first block where the contract has code deployed. For each contract, it retrieves detailed block information including the block number, timestamp, datetime in UTC format, and block hash. The results are saved to `data/deployment_blocks.json` with complete metadata for both contracts. This deployment block information is crucial as it serves as the starting point for all subsequent calculations, ensuring that event processing begins from the moment contracts were actually deployed rather than from an arbitrary block number. The script handles errors gracefully, providing clear feedback if contracts cannot be found or if there are connection issues with the RPC provider.
 
 ## find_daily_blocks.py
 

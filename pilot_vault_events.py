@@ -6,6 +6,8 @@ import re
 from web3 import Web3
 from datetime import datetime
 import time
+import sys
+from utils.get_rpc import get_rpc
 
 # ABI for Transfer event
 TRANSFER_EVENT_ABI = [
@@ -20,16 +22,6 @@ TRANSFER_EVENT_ABI = [
         "type": "event",
     }
 ]
-
-
-def load_rpc_url():
-    """Load RPC URL from rpc.json"""
-    with open("rpc.json", "r") as f:
-        rpc_config = json.load(f)
-    rpc_url = rpc_config.get("mainnet")
-    if not rpc_url:
-        raise ValueError("rpc_url not found in rpc.json")
-    return rpc_url
 
 
 def get_pilot_vault_deployment_block():
@@ -101,7 +93,8 @@ def read_events_chunked(contract, start_block, end_block, chunk_size=10000):
                 print(f"    Retrying with smaller chunk size: {chunk_size // 2}")
                 return read_events_chunked(contract, start_block, end_block, chunk_size // 2)
             else:
-                print("    Skipping this chunk due to persistent error")
+                print("Could not fetch events from block {current_block} to {chunk_end}")
+                sys.exit(1)
         
         current_block = chunk_end + 1
     
@@ -171,38 +164,18 @@ def fetch_and_save_events(w3, contract, contract_address, start_block, end_block
         
     except Exception as e:
         print(f"  Error reading events: {e}")
-        # Save error information to file
-        output_data = {
-            "error": True,
-            "error_message": str(e),
-            "metadata": {
-                "contractAddress": contract_address,
-                "eventName": "Transfer",
-                "startBlock": start_block,
-                "endBlock": end_block,
-                "totalEvents": 0,
-                "exportedAt": datetime.now().isoformat()
-            },
-            "events": []
-        }
-        with open(output_file, 'w') as f:
-            json.dump(output_data, f, indent=2)
-        print(f"  Error information saved to {output_file}")
+        sys.exit(1)
 
 
 def main():
-    # Load RPC URL
-    print("Loading RPC configuration...")
-    rpc_url = load_rpc_url()
-    
     # Initialize Web3 connection
     print("Connecting to blockchain...")
-    w3 = Web3(Web3.HTTPProvider(rpc_url))
+    w3 = Web3(Web3.HTTPProvider(get_rpc()))
     is_connected = (
         w3.is_connected() if hasattr(w3, "is_connected") else w3.isConnected()
     )
     if not is_connected:
-        raise RuntimeError("Cannot connect to RPC, check rpc.json")
+        raise RuntimeError("Cannot connect to RPC")
     
     # Get pilot_vault deployment block and address
     print("Reading deployment blocks...")
