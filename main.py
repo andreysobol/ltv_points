@@ -13,6 +13,6 @@ if __name__ == "__main__":
     src.nft_events.main()
     src.pilot_vault_events.main()
     src.daily_states_v2.process_daily_states()
-    src.daily_points_v2.process_points()
+    src.daily_points_v2.initialize_global_variables_and_process_points()
     src.aggregate_daily_points.aggregate_daily_points()
     test.main_test.run_all_tests()
