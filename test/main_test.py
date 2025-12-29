@@ -39,7 +39,8 @@ def run_all_tests():
         "-s"  # Show print statements
     ])
     
-    sys.exit(exit_code)
+    if exit_code != 0:
+        sys.exit(exit_code)
 
 
 if __name__ == "__main__":
