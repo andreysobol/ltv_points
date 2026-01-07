@@ -23,6 +23,8 @@ POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT = (142 * 1500) // 100  # 1.42
 lp_balances_snapshot = {}
 lp_balances_snapshot_start_block = 0
 
+LP_PROGRAM_DURATION_DAYS = 90
+
 type Points = int
 
 
@@ -35,11 +37,11 @@ def get_user_state(filename, state_key):
         user_state[address.lower()].nft_ids = set(nft)
     for address, state in state["pilot_vault"][state_key].items():
         user_state[address.lower()].balance = state["balance"]
-        user_state[address.lower()].last_positive_balance_update_block = state[
-            "last_positive_balance_update_block"
+        user_state[address.lower()].last_positive_balance_update_day = state[
+            "last_positive_balance_update_day"
         ]
-        user_state[address.lower()].last_negative_balance_update_block = state[
-            "last_negative_balance_update_block"
+        user_state[address.lower()].last_negative_balance_update_day = state[
+            "last_negative_balance_update_day"
         ]
     return user_state
 
@@ -49,11 +51,18 @@ def get_user_state_at_day(day_index, state_key):
     return get_user_state(state_file, state_key)
 
 
-def give_points_for_user_state(user_state, points) -> Dict[str, Points]:
+def give_points_for_user_state(user_state, points, date) -> Dict[str, Points]:
     for address, user_state in user_state.items():
-        balance_excluding_snapshot = max(
-            0, user_state.balance - lp_balances_snapshot[address].balance
-        )
+        balance_excluding_snapshot = 0
+        if (
+            date
+            > user_state.last_positive_balance_update_day + LP_PROGRAM_DURATION_DAYS
+        ):
+            balance_excluding_snapshot = user_state.balance
+        else:
+            balance_excluding_snapshot = max(
+                0, user_state.balance - lp_balances_snapshot[address].balance
+            )
         if len(user_state.nft_ids) == 0:
             points[address.lower()] += (
                 balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN
@@ -94,13 +103,13 @@ def validate_end_state(day_index, result_user_balances):
             result_user_balance[1].nft_ids == cached_user_balance[1].nft_ids
         ), f"User NFT IDs mismatch: {result_user_balance[1].nft_ids} != {cached_user_balance[1].nft_ids}"
         assert (
-            result_user_balance[1].last_positive_balance_update_block
-            == cached_user_balance[1].last_positive_balance_update_block
-        ), f"User last positive balance update block mismatch: {result_user_balance[1].last_positive_balance_update_block} != {cached_user_balance[1].last_positive_balance_update_block}"
+            result_user_balance[1].last_positive_balance_update_day
+            == cached_user_balance[1].last_positive_balance_update_day
+        ), f"User last positive balance update day mismatch: {result_user_balance[1].last_positive_balance_update_day} != {cached_user_balance[1].last_positive_balance_update_day}"
         assert (
-            result_user_balance[1].last_negative_balance_update_block
-            == cached_user_balance[1].last_negative_balance_update_block
-        ), f"User last negative balance update block mismatch: {result_user_balance[1].last_negative_balance_update_block} != {cached_user_balance[1].last_negative_balance_update_block}"
+            result_user_balance[1].last_negative_balance_update_day
+            == cached_user_balance[1].last_negative_balance_update_day
+        ), f"User last negative balance update day mismatch: {result_user_balance[1].last_negative_balance_update_day} != {cached_user_balance[1].last_negative_balance_update_day}"
     print(f"Verified end state for day {day_index}")
 
 
@@ -109,15 +118,16 @@ def get_points(day_index) -> Dict[str, Points]:
     end_block = get_end_block_for_day(day_index)
     block_number_to_events = read_combined_sorted_events(day_index)
     user_state = get_user_state_at_day(day_index, "start_state")
+    date = get_day_date(day_index)
 
     points: Dict[str, Points] = defaultdict(int)
 
     for block_number in range(start_block, end_block + 1):
         events = block_number_to_events[block_number]
         for event in events:
-            user_state = process_event_above_user_state(event, user_state)
+            user_state = process_event_above_user_state(event, user_state, date)
         if block_number > lp_balances_snapshot_start_block:
-            points = give_points_for_user_state(user_state, points)
+            points = give_points_for_user_state(user_state, points, date)
 
     validate_end_state(day_index, user_state)
     return points

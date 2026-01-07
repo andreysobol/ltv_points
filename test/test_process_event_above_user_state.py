@@ -34,12 +34,14 @@ class TestProcessTransferEvent:
             "blockNumber": 12345,
         }
         
-        result = process_transfer_event(event, user_state)
+        date = "2026-01-01"
+        
+        result = process_transfer_event(event, user_state, date)
         
         assert result[from_addr].balance == 800  # 1000 - 200
         assert result[to_addr].balance == 700  # 500 + 200
-        assert result[from_addr].last_negative_balance_update_block == 12345
-        assert result[to_addr].last_positive_balance_update_block == 12345
+        assert result[from_addr].last_negative_balance_update_day == date
+        assert result[to_addr].last_positive_balance_update_day == date
 
     def test_transfer_from_zero_address_mint(self):
         """Test transfer from zero address (minting)"""
@@ -57,13 +59,14 @@ class TestProcessTransferEvent:
             },
             "blockNumber": 12346,
         }
+        date = "2026-01-01"
         
-        result = process_transfer_event(event, user_state)
+        result = process_transfer_event(event, user_state, date)
         
         # Zero address should not be affected
         assert ZERO_ADDRESS not in result or result[ZERO_ADDRESS].balance == 0
         assert result[to_addr].balance == 800  # 500 + 300
-        assert result[to_addr].last_positive_balance_update_block == 12346
+        assert result[to_addr].last_positive_balance_update_day == date
 
     def test_transfer_to_zero_address_burn(self):
         """Test transfer to zero address (burning)"""
@@ -81,11 +84,11 @@ class TestProcessTransferEvent:
             },
             "blockNumber": 12347,
         }
-        
-        result = process_transfer_event(event, user_state)
+        date = "2026-01-01"
+        result = process_transfer_event(event, user_state, date)
         
         assert result[from_addr].balance == 600  # 1000 - 400
-        assert result[from_addr].last_negative_balance_update_block == 12347
+        assert result[from_addr].last_negative_balance_update_day == date
         # Zero address should not be affected
         assert ZERO_ADDRESS not in result or result[ZERO_ADDRESS].balance == 0
 
@@ -107,8 +110,8 @@ class TestProcessTransferEvent:
             },
             "blockNumber": 12348,
         }
-        
-        result = process_transfer_event(event, user_state)
+        date = "2026-01-01"
+        result = process_transfer_event(event, user_state, date)
         
         # Should use lowercase addresses
         assert result[from_addr.lower()].balance == 800
@@ -132,9 +135,10 @@ class TestProcessTransferEvent:
             },
             "blockNumber": 12350,
         }
-        result = process_transfer_event(event1, user_state)
+        date = "2026-01-01"
+        result = process_transfer_event(event1, user_state, date)
         assert result[user_addr].balance == 800
-        assert result[user_addr].last_negative_balance_update_block == 12350
+        assert result[user_addr].last_negative_balance_update_day == date
         
         # Second transfer: user receives 100
         event2 = {
@@ -146,9 +150,10 @@ class TestProcessTransferEvent:
             },
             "blockNumber": 12351,
         }
-        result = process_transfer_event(event2, result)
+        date = "2026-01-01"
+        result = process_transfer_event(event2, result, date)
         assert result[user_addr].balance == 900  # 800 + 100
-        assert result[user_addr].last_positive_balance_update_block == 12351
+        assert result[user_addr].last_positive_balance_update_day == date
 
     def test_transfer_negative_balance_raises_error(self):
         """Test that transfer resulting in negative balance raises ValueError"""
@@ -167,9 +172,9 @@ class TestProcessTransferEvent:
             },
             "blockNumber": 12352,
         }
-        
+        date = "2026-01-01"
         try:
-            process_transfer_event(event, user_state)
+            process_transfer_event(event, user_state, date)
             assert False, "Should have raised ValueError"
         except ValueError as e:
             assert "Balance" in str(e) and "negative" in str(e)
@@ -360,13 +365,13 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12360,
         }
-        
-        result = process_event_above_user_state(event, user_state)
+        date = "2026-01-01"
+        result = process_event_above_user_state(event, user_state, date)
         
         assert result[from_addr].balance == 800
         assert result[to_addr].balance == 700
-        assert result[from_addr].last_negative_balance_update_block == 12360
-        assert result[to_addr].last_positive_balance_update_block == 12360
+        assert result[from_addr].last_negative_balance_update_day == date
+        assert result[to_addr].last_positive_balance_update_day == date
 
     def test_process_nft_event(self):
         """Test that process_event_above_user_state routes NFT events correctly"""
@@ -386,8 +391,8 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12361,
         }
-        
-        result = process_event_above_user_state(event, user_state)
+        date = "2026-01-01"
+        result = process_event_above_user_state(event, user_state, date)
         
         assert result[from_addr].nft_ids == {1, 3}
         assert result[to_addr].nft_ids == {4, 2}
@@ -401,9 +406,9 @@ class TestProcessEventAboveUserState:
             "args": {},
             "blockNumber": 12362,
         }
-        
+        date = "2026-01-01"
         try:
-            process_event_above_user_state(event, user_state)
+            process_event_above_user_state(event, user_state, date)
             assert False, "Should have raised ValueError"
         except ValueError as e:
             assert "Invalid event type" in str(e)
@@ -429,14 +434,14 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12363,
         }
-        
-        result = process_event_above_user_state(event, user_state)
+        date = "2026-01-01"
+        result = process_event_above_user_state(event, user_state, date)
         
         # user3 should be unchanged
         assert result[user3].balance == 2000
         assert result[user3].nft_ids == {10, 20}
-        assert result[user3].last_positive_balance_update_block == 0
-        assert result[user3].last_negative_balance_update_block == 0
+        assert result[user3].last_positive_balance_update_day == 0
+        assert result[user3].last_negative_balance_update_day == 0
 
     def test_process_event_combined_transfer_and_nft(self):
         """Test processing both transfer and NFT events in sequence"""
@@ -459,7 +464,8 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12364,
         }
-        result = process_event_above_user_state(transfer_event, user_state)
+        date = "2026-01-01"
+        result = process_event_above_user_state(transfer_event, user_state, date)
         
         assert result[user1].balance == 800
         assert result[user2].balance == 700
@@ -477,7 +483,8 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12365,
         }
-        result = process_event_above_user_state(nft_event, result)
+        date = "2026-01-01"
+        result = process_event_above_user_state(nft_event, result, date)
         
         # Balances should be unchanged
         assert result[user1].balance == 800
@@ -503,9 +510,9 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12366,
         }
-        
+        date = "2026-01-01"
         try:
-            process_event_above_user_state(event, user_state)
+            process_event_above_user_state(event, user_state, date)
             assert False, "Should have raised ValueError"
         except ValueError as e:
             assert "Balance" in str(e) and "negative" in str(e)
@@ -528,9 +535,9 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12367,
         }
-        
+        date = "2026-01-01"
         try:
-            process_event_above_user_state(event, user_state)
+            process_event_above_user_state(event, user_state, date)
             assert False, "Should have raised ValueError"
         except ValueError as e:
             assert "Token" in str(e) and "not found" in str(e)
@@ -553,9 +560,9 @@ class TestProcessEventAboveUserState:
             },
             "blockNumber": 12368,
         }
-        
+        date = "2026-01-01"
         try:
-            process_event_above_user_state(event, user_state)
+            process_event_above_user_state(event, user_state, date)
             assert False, "Should have raised ValueError"
         except ValueError as e:
             assert "Token" in str(e) and "already exists" in str(e)

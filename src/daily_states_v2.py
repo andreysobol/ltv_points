@@ -38,6 +38,7 @@ def calculate_daily_state_after_end_block(
 ):
     user_state = users_state_before_start_block
 
+    date = get_day_date(day_index)
     block_number_to_events = read_combined_sorted_events(day_index)
     start_block = get_start_block_for_day(day_index)
     end_block = get_end_block_for_day(day_index)
@@ -45,11 +46,11 @@ def calculate_daily_state_after_end_block(
     for block_number in range(start_block, end_block + 1):
         events = block_number_to_events[block_number]
         for event in events:
-            user_state = process_event_above_user_state(event, user_state)
+            user_state = process_event_above_user_state(event, user_state, date)
 
     return DailyState(
         day_index=day_index,
-        date=get_day_date(day_index),
+        date=date,
         start_block=start_block,
         end_block=end_block,
         user_state=user_state,
@@ -58,8 +59,8 @@ def calculate_daily_state_after_end_block(
 def clear_cached_values_for_zero_balances(user_state: dict[str, UserState]):
     for address, state in user_state.items():
         if state.balance == 0:
-            state.last_positive_balance_update_block = 0
-            state.last_negative_balance_update_block = 0
+            state.last_positive_balance_update_day = ""
+            state.last_negative_balance_update_day = ""
         user_state[address] = state
 
     return user_state
@@ -72,8 +73,8 @@ def write_user_state_to_file(
     daily_balances_after_end_block = {
         address.lower(): {
             "balance": state.balance,
-            "last_positive_balance_update_block": state.last_positive_balance_update_block,
-            "last_negative_balance_update_block": state.last_negative_balance_update_block,
+            "last_positive_balance_update_day": state.last_positive_balance_update_day,
+            "last_negative_balance_update_day": state.last_negative_balance_update_day,
         }
         for address, state in daily_state_after_end_block.user_state.items()
         if state.balance > 0
@@ -86,8 +87,8 @@ def write_user_state_to_file(
     daily_balances_before_start_block = {
         address.lower(): {
             "balance": state.balance,
-            "last_positive_balance_update_block": state.last_positive_balance_update_block,
-            "last_negative_balance_update_block": state.last_negative_balance_update_block,
+            "last_positive_balance_update_day": state.last_positive_balance_update_day,
+            "last_negative_balance_update_day": state.last_negative_balance_update_day,
         }
         for address, state in user_state_before_start_block.items()
         if state.balance > 0

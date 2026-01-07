@@ -1606,415 +1606,415 @@
     "start_state": {
       "0xa95584c820b5bc990a0572df4faba7fb9f4e210b": {
         "balance": 5000000000000000,
-        "last_positive_balance_update_block": 23799980,
-        "last_negative_balance_update_block": 23799940
+        "last_positive_balance_update_day": "2025-11-14",
+        "last_negative_balance_update_day": "2025-11-14"
       },
       "0x6f9bb7e454f5b3eb2310343f0e99269dc2bb8a1d": {
         "balance": 102819000000000000000,
-        "last_positive_balance_update_block": 23922240,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       },
       "0x290ca510021d18699b268f133813f6262a650d94": {
         "balance": 2000000000000000000,
-        "last_positive_balance_update_block": 23822249,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0xd2c2e84501c63b7b9897df063288d67060119c99": {
         "balance": 40000000000000000000,
-        "last_positive_balance_update_block": 23825199,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0x12667125770eb9fb46c48db659d3275e8fcd2ed7": {
         "balance": 39000000000000000000,
-        "last_positive_balance_update_block": 23925586,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       },
       "0x9ab5b54092a1596a32127163b7b0176445eb1b0a": {
         "balance": 36701000000000000000,
-        "last_positive_balance_update_block": 23871031,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-24",
+        "last_negative_balance_update_day": ""
       },
       "0xdc6447010c602bbcbdbe2aaff27d24af55fe5b75": {
         "balance": 24910000000000000000,
-        "last_positive_balance_update_block": 23905943,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-29",
+        "last_negative_balance_update_day": ""
       },
       "0x39d10a4ad72a9b5bf7f1994233fdc331b01c685b": {
         "balance": 1002000000000000000,
-        "last_positive_balance_update_block": 23806712,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-15",
+        "last_negative_balance_update_day": ""
       },
       "0x91a98fd033434adf63223f88064c95a89e08061c": {
         "balance": 8003750565999172549,
-        "last_positive_balance_update_block": 23787167,
-        "last_negative_balance_update_block": 23785530
+        "last_positive_balance_update_day": "2025-11-13",
+        "last_negative_balance_update_day": "2025-11-12"
       },
       "0x202065dfb813295d0b095a39e36e3b3296210505": {
         "balance": 534187211964517143,
-        "last_positive_balance_update_block": 23925946,
-        "last_negative_balance_update_block": 23786860
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": "2025-11-13"
       },
       "0x758e5c5c4dd4c6aa1384f0495656a4f7c2f49ec3": {
         "balance": 134000000000000000,
-        "last_positive_balance_update_block": 23820211,
-        "last_negative_balance_update_block": 23805937
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": "2025-11-15"
       },
       "0xede66ed0fca1a9ebb052cce681c89d7535408ccf": {
         "balance": 329887899954383005,
-        "last_positive_balance_update_block": 23818200,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0xa0b14f6fe7f647e84b4ac954036865330a9eac5c": {
         "balance": 80000000000000000,
-        "last_positive_balance_update_block": 23818918,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0x188a7c5b071c01ad31ad80ae7fc28b1b6f389fd6": {
         "balance": 32000000000000000000,
-        "last_positive_balance_update_block": 23820609,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0x73afef607da2dbd27bd9c83e9e9297ae9ca1fd2b": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23824320,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0x54b3ff56f75671d91d85d44bccedbc9179e09afc": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23825016,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0x5b191f5a2b4a867c4ed71858daccc51fc59c69c0": {
         "balance": 30000000000000000000,
-        "last_positive_balance_update_block": 23827114,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0xfb40932271fc9db9dbf048e80697e2da4aa57250": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23827958,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0xd5f4cbfadb349be5dba580f9360eb6867a1d590e": {
         "balance": 29700000000000000000,
-        "last_positive_balance_update_block": 23894396,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-28",
+        "last_negative_balance_update_day": ""
       },
       "0x0450a946a93cf6f81fd72f1e85e16a8826bc9c4d": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23832217,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-19",
+        "last_negative_balance_update_day": ""
       },
       "0xedf3af29040e069a4cbd6e13fbead2500733f2b1": {
         "balance": 35000000000000000000,
-        "last_positive_balance_update_block": 23833425,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-19",
+        "last_negative_balance_update_day": ""
       },
       "0x8a252b597856b06b3e7efe5d798d73b3c5fbf5ca": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23833435,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-19",
+        "last_negative_balance_update_day": ""
       },
       "0xa52af0e35970783f587b77f7b8db94871435009c": {
         "balance": 49918800000000000000,
-        "last_positive_balance_update_block": 23854067,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-22",
+        "last_negative_balance_update_day": ""
       },
       "0xb378273190f974e017d13db074976d55f57e0d20": {
         "balance": 50000000000000000000,
-        "last_positive_balance_update_block": 23839846,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-20",
+        "last_negative_balance_update_day": ""
       },
       "0xdf516f0df67b53f9fc0d4c443a9b07da4ac3174d": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23842669,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-20",
+        "last_negative_balance_update_day": ""
       },
       "0xc3cb47f1d74abc82cc9acd748c9c6714f9c77eff": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23848301,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-21",
+        "last_negative_balance_update_day": ""
       },
       "0x9bcd43b2f6f43cb26032edf584f9e511091f83b0": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23871815,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-24",
+        "last_negative_balance_update_day": ""
       },
       "0x588058a144e22d96e235a5aab6e81c9a5749538e": {
         "balance": 34900000000000000000,
-        "last_positive_balance_update_block": 23878240,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-25",
+        "last_negative_balance_update_day": ""
       },
       "0xe4e8d412e3dce3357bb420ec24e51f6bcc1a1bc0": {
         "balance": 50000000000000000000,
-        "last_positive_balance_update_block": 23891072,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-27",
+        "last_negative_balance_update_day": ""
       },
       "0x6c153feae296dd6f0249323cf597724a9ebfff33": {
         "balance": 91300000000000000000,
-        "last_positive_balance_update_block": 23896868,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-28",
+        "last_negative_balance_update_day": ""
       },
       "0x5fe0cdf0b1c84cd4a92cec746c84816a3a8b21ef": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23898488,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-28",
+        "last_negative_balance_update_day": ""
       },
       "0xdb4efc647a72ed5fb03c20143b85657dafb6a039": {
         "balance": 99700000000000000000,
-        "last_positive_balance_update_block": 23904652,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-29",
+        "last_negative_balance_update_day": ""
       },
       "0x9b029d74e8770b8a7a88670f5ec69c3c6d33f0e2": {
         "balance": 24500000000000000000,
-        "last_positive_balance_update_block": 23914535,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-30",
+        "last_negative_balance_update_day": ""
       },
       "0x96fe4e4cd275f1f39eea9d6184447c12006b8536": {
         "balance": 29870000000000000000,
-        "last_positive_balance_update_block": 23925946,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       },
       "0x05dac02c4c226da6824e0fd2a944c97ab6a34c5d": {
         "balance": 25050000000000000000,
-        "last_positive_balance_update_block": 23926788,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       }
     },
     "end_state": {
       "0xa95584c820b5bc990a0572df4faba7fb9f4e210b": {
         "balance": 5000000000000000,
-        "last_positive_balance_update_block": 23799980,
-        "last_negative_balance_update_block": 23799940
+        "last_positive_balance_update_day": "2025-11-14",
+        "last_negative_balance_update_day": "2025-11-14"
       },
       "0x6f9bb7e454f5b3eb2310343f0e99269dc2bb8a1d": {
         "balance": 102819000000000000000,
-        "last_positive_balance_update_block": 23922240,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       },
       "0x52d0fc347560cc997f87984200f4a9344ecdc597": {
         "balance": 10333853293515596790,
-        "last_positive_balance_update_block": 23990967,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0x290ca510021d18699b268f133813f6262a650d94": {
         "balance": 2000000000000000000,
-        "last_positive_balance_update_block": 23822249,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0xe386af9ffb851557e294593689b579cd8afa0758": {
         "balance": 100055503276642809,
-        "last_positive_balance_update_block": 23990450,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0xd2c2e84501c63b7b9897df063288d67060119c99": {
         "balance": 40000000000000000000,
-        "last_positive_balance_update_block": 23825199,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0x12667125770eb9fb46c48db659d3275e8fcd2ed7": {
         "balance": 39000000000000000000,
-        "last_positive_balance_update_block": 23925586,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       },
       "0x8252a1a673796110ca091344fdae1729e7aea94b": {
         "balance": 9935723976098399651,
-        "last_positive_balance_update_block": 23990117,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0xfbb041e1e292e34f90c1333e5360f5ff2f3f6450": {
         "balance": 4968881026988266501,
-        "last_positive_balance_update_block": 23992611,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0x9ab5b54092a1596a32127163b7b0176445eb1b0a": {
         "balance": 36701000000000000000,
-        "last_positive_balance_update_block": 23871031,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-24",
+        "last_negative_balance_update_day": ""
       },
       "0xdc6447010c602bbcbdbe2aaff27d24af55fe5b75": {
         "balance": 24910000000000000000,
-        "last_positive_balance_update_block": 23905943,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-29",
+        "last_negative_balance_update_day": ""
       },
       "0x210351fcc900c1e5ef4c7b1bf3d37ab33ca87114": {
         "balance": 948902577169175117,
-        "last_positive_balance_update_block": 23990662,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0x728754bf437ec16d197e06af053c7b006b89e330": {
         "balance": 312018837922214793,
-        "last_positive_balance_update_block": 23992397,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0x39d10a4ad72a9b5bf7f1994233fdc331b01c685b": {
         "balance": 1002000000000000000,
-        "last_positive_balance_update_block": 23806712,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-15",
+        "last_negative_balance_update_day": ""
       },
       "0x91a98fd033434adf63223f88064c95a89e08061c": {
         "balance": 8003750565999172549,
-        "last_positive_balance_update_block": 23787167,
-        "last_negative_balance_update_block": 23785530
+        "last_positive_balance_update_day": "2025-11-13",
+        "last_negative_balance_update_day": "2025-11-12"
       },
       "0x202065dfb813295d0b095a39e36e3b3296210505": {
         "balance": 1056298019096578403,
-        "last_positive_balance_update_block": 23990117,
-        "last_negative_balance_update_block": 23786860
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": "2025-11-13"
       },
       "0x758e5c5c4dd4c6aa1384f0495656a4f7c2f49ec3": {
         "balance": 134000000000000000,
-        "last_positive_balance_update_block": 23820211,
-        "last_negative_balance_update_block": 23805937
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": "2025-11-15"
       },
       "0xede66ed0fca1a9ebb052cce681c89d7535408ccf": {
         "balance": 329887899954383005,
-        "last_positive_balance_update_block": 23818200,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0xa0b14f6fe7f647e84b4ac954036865330a9eac5c": {
         "balance": 80000000000000000,
-        "last_positive_balance_update_block": 23818918,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0x188a7c5b071c01ad31ad80ae7fc28b1b6f389fd6": {
         "balance": 32000000000000000000,
-        "last_positive_balance_update_block": 23820609,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-17",
+        "last_negative_balance_update_day": ""
       },
       "0x73afef607da2dbd27bd9c83e9e9297ae9ca1fd2b": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23824320,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0x54b3ff56f75671d91d85d44bccedbc9179e09afc": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23825016,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0x5b191f5a2b4a867c4ed71858daccc51fc59c69c0": {
         "balance": 30000000000000000000,
-        "last_positive_balance_update_block": 23827114,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0xfb40932271fc9db9dbf048e80697e2da4aa57250": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23827958,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-18",
+        "last_negative_balance_update_day": ""
       },
       "0xd5f4cbfadb349be5dba580f9360eb6867a1d590e": {
         "balance": 29700000000000000000,
-        "last_positive_balance_update_block": 23894396,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-28",
+        "last_negative_balance_update_day": ""
       },
       "0x0450a946a93cf6f81fd72f1e85e16a8826bc9c4d": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23832217,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-19",
+        "last_negative_balance_update_day": ""
       },
       "0xedf3af29040e069a4cbd6e13fbead2500733f2b1": {
         "balance": 35000000000000000000,
-        "last_positive_balance_update_block": 23833425,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-19",
+        "last_negative_balance_update_day": ""
       },
       "0x8a252b597856b06b3e7efe5d798d73b3c5fbf5ca": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23833435,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-19",
+        "last_negative_balance_update_day": ""
       },
       "0xa52af0e35970783f587b77f7b8db94871435009c": {
         "balance": 49918800000000000000,
-        "last_positive_balance_update_block": 23854067,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-22",
+        "last_negative_balance_update_day": ""
       },
       "0xafd8fb69e850d2da8ac47e4443b0140f4de5fb4f": {
         "balance": 41733193364711737,
-        "last_positive_balance_update_block": 23991027,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0xb378273190f974e017d13db074976d55f57e0d20": {
         "balance": 50000000000000000000,
-        "last_positive_balance_update_block": 23839846,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-20",
+        "last_negative_balance_update_day": ""
       },
       "0xdf516f0df67b53f9fc0d4c443a9b07da4ac3174d": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23842669,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-20",
+        "last_negative_balance_update_day": ""
       },
       "0xc3cb47f1d74abc82cc9acd748c9c6714f9c77eff": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23848301,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-21",
+        "last_negative_balance_update_day": ""
       },
       "0x362930cb6695b4623b300b96755cf1841a9b6766": {
         "balance": 1093400000000000000,
-        "last_positive_balance_update_block": 23990132,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0x9bcd43b2f6f43cb26032edf584f9e511091f83b0": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23871815,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-24",
+        "last_negative_balance_update_day": ""
       },
       "0x588058a144e22d96e235a5aab6e81c9a5749538e": {
         "balance": 34900000000000000000,
-        "last_positive_balance_update_block": 23878240,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-25",
+        "last_negative_balance_update_day": ""
       },
       "0xda9558ddd9e70e74130825bc69ccbd28c7078ecc": {
         "balance": 54656871953679352,
-        "last_positive_balance_update_block": 23992427,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0xe4e8d412e3dce3357bb420ec24e51f6bcc1a1bc0": {
         "balance": 50000000000000000000,
-        "last_positive_balance_update_block": 23891072,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-27",
+        "last_negative_balance_update_day": ""
       },
       "0x6c153feae296dd6f0249323cf597724a9ebfff33": {
         "balance": 91300000000000000000,
-        "last_positive_balance_update_block": 23896868,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-28",
+        "last_negative_balance_update_day": ""
       },
       "0x5fe0cdf0b1c84cd4a92cec746c84816a3a8b21ef": {
         "balance": 25000000000000000000,
-        "last_positive_balance_update_block": 23898488,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-28",
+        "last_negative_balance_update_day": ""
       },
       "0xdb4efc647a72ed5fb03c20143b85657dafb6a039": {
         "balance": 99700000000000000000,
-        "last_positive_balance_update_block": 23904652,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-29",
+        "last_negative_balance_update_day": ""
       },
       "0x9b029d74e8770b8a7a88670f5ec69c3c6d33f0e2": {
         "balance": 24500000000000000000,
-        "last_positive_balance_update_block": 23914535,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-11-30",
+        "last_negative_balance_update_day": ""
       },
       "0x96fe4e4cd275f1f39eea9d6184447c12006b8536": {
         "balance": 29870000000000000000,
-        "last_positive_balance_update_block": 23925946,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       },
       "0x05dac02c4c226da6824e0fd2a944c97ab6a34c5d": {
         "balance": 25050000000000000000,
-        "last_positive_balance_update_block": 23926788,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-02",
+        "last_negative_balance_update_day": ""
       },
       "0x9c271f7a72c036b707f78c8385f99def5d247da0": {
         "balance": 5961705151466418460,
-        "last_positive_balance_update_block": 23990670,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0xfc5a5cf12eaff17fd3be6e5e5d0e2259d5cb1a6f": {
         "balance": 784828804165223,
-        "last_positive_balance_update_block": 23989320,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       },
       "0x49b1c333a7285f598a4b68dedcaaf761ecadf0eb": {
         "balance": 993756350401335689,
-        "last_positive_balance_update_block": 23992368,
-        "last_negative_balance_update_block": 0
+        "last_positive_balance_update_day": "2025-12-11",
+        "last_negative_balance_update_day": ""
       }
     }
   }
