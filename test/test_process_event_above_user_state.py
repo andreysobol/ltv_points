@@ -440,8 +440,8 @@ class TestProcessEventAboveUserState:
         # user3 should be unchanged
         assert result[user3].balance == 2000
         assert result[user3].nft_ids == {10, 20}
-        assert result[user3].last_positive_balance_update_day == 0
-        assert result[user3].last_negative_balance_update_day == 0
+        assert result[user3].last_positive_balance_update_day == ""
+        assert result[user3].last_negative_balance_update_day == ""
 
     def test_process_event_combined_transfer_and_nft(self):
         """Test processing both transfer and NFT events in sequence"""

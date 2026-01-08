@@ -14,6 +14,7 @@ from .utils.get_additional_data import (
     get_end_block_for_day,
     get_day_date,
 )
+from datetime import datetime
 
 ZERO_ADDRESS = "0x" + "0" * 40
 
@@ -54,9 +55,8 @@ def get_user_state_at_day(day_index, state_key):
 def give_points_for_user_state(user_state, points, date) -> Dict[str, Points]:
     for address, user_state in user_state.items():
         balance_excluding_snapshot = 0
-        if (
-            date
-            > user_state.last_positive_balance_update_day + LP_PROGRAM_DURATION_DAYS
+        if (user_state.last_positive_balance_update_day == "" or 
+            (datetime.fromisoformat(date) - datetime.fromisoformat(user_state.last_positive_balance_update_day)).days > LP_PROGRAM_DURATION_DAYS
         ):
             balance_excluding_snapshot = user_state.balance
         else:

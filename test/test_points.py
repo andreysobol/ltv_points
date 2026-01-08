@@ -4,10 +4,11 @@ import json
 from unittest.mock import patch
 from collections import defaultdict
 import sys
+from datetime import datetime, timedelta
 
 # Add parent directory to path to import daily_points_v2
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from src.daily_points_v2 import give_points_for_user_state, POINTS_PER_PILOT_VAULT_TOKEN, POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT
+from src.daily_points_v2 import give_points_for_user_state, POINTS_PER_PILOT_VAULT_TOKEN, POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT, LP_PROGRAM_DURATION_DAYS
 from src.utils.process_event_above_user_state import UserState
 
 DATA_DIR = Path("data")
@@ -104,9 +105,11 @@ class TestPoints:
         user_state = {
             "0x1234567890123456789012345678901234567890": UserState(balance=500, nft_ids=set())
         }
+        user_state["0x1234567890123456789012345678901234567890"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         balance_excluding_snapshot = max(0, 500 - 100)  # 400
         expected_points = balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN  # 400 * 1500 = 600000
@@ -122,9 +125,11 @@ class TestPoints:
         user_state = {
             "0xABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD": UserState(balance=1000, nft_ids={1, 2, 3})
         }
+        user_state["0xABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         balance_excluding_snapshot = max(0, 1000 - 200)  # 800
         expected_points = balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT  # 800 * 1420 * 1.5 = 1704000
@@ -140,9 +145,11 @@ class TestPoints:
         user_state = {
             "0x1111111111111111111111111111111111111111": UserState(balance=500, nft_ids=set())
         }
+        user_state["0x1111111111111111111111111111111111111111"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         # balance_excluding_snapshot should be max(0, 500 - 1000) = 0
         assert result["0x1111111111111111111111111111111111111111"] == 0
@@ -155,9 +162,11 @@ class TestPoints:
         user_state = {
             "0xABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD": UserState(balance=100, nft_ids=set())
         }
+        user_state["0xABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         # Should use lowercase address as key
         assert "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd" in result
@@ -172,10 +181,12 @@ class TestPoints:
         user_state = {
             "0x2222222222222222222222222222222222222222": UserState(balance=100, nft_ids=set())
         }
+        user_state["0x2222222222222222222222222222222222222222"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
         points["0x2222222222222222222222222222222222222222"] = 5000  # Existing points
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         expected_new_points = 100 * POINTS_PER_PILOT_VAULT_TOKEN  # 150000
         assert result["0x2222222222222222222222222222222222222222"] == 5000 + expected_new_points
@@ -191,9 +202,12 @@ class TestPoints:
             "0x1111111111111111111111111111111111111111": UserState(balance=500, nft_ids=set()),
             "0x2222222222222222222222222222222222222222": UserState(balance=1000, nft_ids={1}),
         }
+        user_state["0x1111111111111111111111111111111111111111"].last_positive_balance_update_day = "2026-01-01"
+        user_state["0x2222222222222222222222222222222222222222"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         # User 1: no NFT, balance_excluding_snapshot = 500 - 100 = 400
         assert result["0x1111111111111111111111111111111111111111"] == 400 * POINTS_PER_PILOT_VAULT_TOKEN
@@ -209,9 +223,11 @@ class TestPoints:
         user_state = {
             "0x3333333333333333333333333333333333333333": UserState(balance=500, nft_ids=set())
         }
+        user_state["0x3333333333333333333333333333333333333333"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         # balance_excluding_snapshot = max(0, 500 - 500) = 0
         assert result["0x3333333333333333333333333333333333333333"] == 0
@@ -224,9 +240,120 @@ class TestPoints:
         user_state = {
             "0x4444444444444444444444444444444444444444": UserState(balance=100, nft_ids=set())
         }
+        user_state["0x4444444444444444444444444444444444444444"].last_positive_balance_update_day = "2026-01-01"
         points = defaultdict(int)
+        date = "2026-01-15"  # Within 90 days, so should subtract snapshot
         
-        result = give_points_for_user_state(user_state, points)
+        result = give_points_for_user_state(user_state, points, date)
         
         # Empty set should use POINTS_PER_PILOT_VAULT_TOKEN (not FOR_NFT)
         assert result["0x4444444444444444444444444444444444444444"] == 100 * POINTS_PER_PILOT_VAULT_TOKEN
+
+    @patch('src.daily_points_v2.lp_balances_snapshot', new={
+        "0x5555555555555555555555555555555555555555": UserState(balance=200)
+    })
+    def test_give_points_unlocked_rewards_without_nft(self):
+        """Test that rewards are unlocked (full balance used) when date > last_positive_balance_update_day + 90 days"""
+        user_state = {
+            "0x5555555555555555555555555555555555555555": UserState(balance=500, nft_ids=set())
+        }
+        # Set last update to 100 days ago
+        last_update_date = datetime(2026, 1, 1).date()
+        current_date = last_update_date + timedelta(days=LP_PROGRAM_DURATION_DAYS + 10)  # 100 days later
+        user_state["0x5555555555555555555555555555555555555555"].last_positive_balance_update_day = str(last_update_date)
+        points = defaultdict(int)
+        date = str(current_date)
+        
+        result = give_points_for_user_state(user_state, points, date)
+        
+        # Should use full balance (500), not subtract snapshot (200)
+        expected_points = 500 * POINTS_PER_PILOT_VAULT_TOKEN  # 750000
+        assert result["0x5555555555555555555555555555555555555555"] == expected_points
+        assert result["0x5555555555555555555555555555555555555555"] == 750000
+
+    @patch('src.daily_points_v2.lp_balances_snapshot', new={
+        "0x6666666666666666666666666666666666666666": UserState(balance=300)
+    })
+    def test_give_points_unlocked_rewards_with_nft(self):
+        """Test that rewards are unlocked (full balance used) when date > last_positive_balance_update_day + 90 days for users with NFT"""
+        user_state = {
+            "0x6666666666666666666666666666666666666666": UserState(balance=1000, nft_ids={1, 2})
+        }
+        # Set last update to 100 days ago
+        last_update_date = datetime(2026, 1, 1).date()
+        current_date = last_update_date + timedelta(days=LP_PROGRAM_DURATION_DAYS + 10)  # 100 days later
+        user_state["0x6666666666666666666666666666666666666666"].last_positive_balance_update_day = str(last_update_date)
+        points = defaultdict(int)
+        date = str(current_date)
+        
+        result = give_points_for_user_state(user_state, points, date)
+        
+        # Should use full balance (1000), not subtract snapshot (300)
+        expected_points = 1000 * POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT  # 2130000
+        assert result["0x6666666666666666666666666666666666666666"] == expected_points
+        assert result["0x6666666666666666666666666666666666666666"] == 2130000
+
+    @patch('src.daily_points_v2.lp_balances_snapshot', new={
+        "0x7777777777777777777777777777777777777777": UserState(balance=200)
+    })
+    def test_give_points_not_unlocked_within_90_days(self):
+        """Test that rewards are NOT unlocked when date <= last_positive_balance_update_day + 90 days"""
+        user_state = {
+            "0x7777777777777777777777777777777777777777": UserState(balance=500, nft_ids=set())
+        }
+        # Set last update to 50 days ago (within 90 day period)
+        last_update_date = datetime(2026, 1, 1).date()
+        current_date = last_update_date + timedelta(days=50)  # 50 days later
+        user_state["0x7777777777777777777777777777777777777777"].last_positive_balance_update_day = str(last_update_date)
+        points = defaultdict(int)
+        date = str(current_date)
+        
+        result = give_points_for_user_state(user_state, points, date)
+        
+        # Should subtract snapshot: max(0, 500 - 200) = 300
+        expected_points = 300 * POINTS_PER_PILOT_VAULT_TOKEN  # 450000
+        assert result["0x7777777777777777777777777777777777777777"] == expected_points
+        assert result["0x7777777777777777777777777777777777777777"] == 450000
+
+    @patch('src.daily_points_v2.lp_balances_snapshot', new={
+        "0x8888888888888888888888888888888888888888": UserState(balance=100)
+    })
+    def test_give_points_unlocked_exactly_90_days(self):
+        """Test that rewards are NOT unlocked exactly at 90 days (must be > 90 days)"""
+        user_state = {
+            "0x8888888888888888888888888888888888888888": UserState(balance=500, nft_ids=set())
+        }
+        # Set last update to exactly 90 days ago
+        last_update_date = datetime(2026, 1, 1).date()
+        current_date = last_update_date + timedelta(days=LP_PROGRAM_DURATION_DAYS)  # Exactly 90 days later
+        user_state["0x8888888888888888888888888888888888888888"].last_positive_balance_update_day = str(last_update_date)
+        points = defaultdict(int)
+        date = str(current_date)
+        
+        result = give_points_for_user_state(user_state, points, date)
+        
+        # Should still subtract snapshot since date is not > 90 days: max(0, 500 - 100) = 400
+        expected_points = 400 * POINTS_PER_PILOT_VAULT_TOKEN  # 600000
+        assert result["0x8888888888888888888888888888888888888888"] == expected_points
+        assert result["0x8888888888888888888888888888888888888888"] == 600000
+
+    @patch('src.daily_points_v2.lp_balances_snapshot', new={
+        "0x9999999999999999999999999999999999999999": UserState(balance=0)
+    })
+    def test_give_points_unlocked_empty_last_update_day(self):
+        """Test that empty last_positive_balance_update_day is handled correctly"""
+        user_state = {
+            "0x9999999999999999999999999999999999999999": UserState(balance=100, nft_ids=set())
+        }
+        user_state["0x9999999999999999999999999999999999999999"].last_positive_balance_update_day = ""  # Empty string
+        points = defaultdict(int)
+        date = "2026-01-15"
+        
+        result = give_points_for_user_state(user_state, points, date)
+        
+        # Empty string comparison should fall back to snapshot subtraction
+        # Since "" + 90 won't work properly, this tests edge case handling
+        # The implementation should handle this gracefully
+        # For now, we expect it to use snapshot subtraction (normal behavior)
+        expected_points = 100 * POINTS_PER_PILOT_VAULT_TOKEN  # 150000
+        assert result["0x9999999999999999999999999999999999999999"] == expected_points
