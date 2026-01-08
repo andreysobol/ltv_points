@@ -52,17 +52,23 @@ def get_user_state_at_day(day_index, state_key):
     return get_user_state(state_file, state_key)
 
 
+def get_balance_excluding_snapshot(address, user_state, date) -> int:
+    if (
+        user_state.last_positive_balance_update_day != ""
+        and (
+            datetime.fromisoformat(date)
+            - datetime.fromisoformat(user_state.last_positive_balance_update_day)
+        ).days
+        > LP_PROGRAM_DURATION_DAYS
+    ):
+        return user_state.balance
+    else:
+        return max(0, user_state.balance - lp_balances_snapshot[address].balance)
+
+
 def give_points_for_user_state(user_state, points, date) -> Dict[str, Points]:
     for address, user_state in user_state.items():
-        balance_excluding_snapshot = 0
-        if (user_state.last_positive_balance_update_day == "" or 
-            (datetime.fromisoformat(date) - datetime.fromisoformat(user_state.last_positive_balance_update_day)).days > LP_PROGRAM_DURATION_DAYS
-        ):
-            balance_excluding_snapshot = user_state.balance
-        else:
-            balance_excluding_snapshot = max(
-                0, user_state.balance - lp_balances_snapshot[address].balance
-            )
+        balance_excluding_snapshot = get_balance_excluding_snapshot(address, user_state, date)
         if len(user_state.nft_ids) == 0:
             points[address.lower()] += (
                 balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN
