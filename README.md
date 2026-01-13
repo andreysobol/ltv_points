@@ -31,6 +31,25 @@ This will run all processing steps in sequence:
 8. Run test suite
 9. Copy latest aggregated points to latest folder
 
+### Integrity Checking
+
+The system includes an integrity checker that validates LP (Liquidity Provider) balance integrity. This tool ensures that user balances never drop below their snapshot balance during the 90-day LP program period.
+
+Run the integrity checker:
+
+```bash
+python3 -m src.check_lp_integrity
+```
+
+The integrity checker:
+- Validates that user balances never fall below their snapshot balance
+- Only checks blocks after the LP balances snapshot start block
+- Only validates users within the 90-day LP program duration period
+- Reports the first block where integrity is broken for each affected user
+- Returns exit code 1 if integrity issues are found, 0 otherwise
+
+The checker processes all days and prints progress information. If integrity issues are detected, it will list all affected users and the first block where the issue occurred.
+
 ### Docker
 
 Build and run using Docker:
