@@ -8,11 +8,11 @@ class UserState:
     def __init__(self, balance: int = 0, nft_ids: set[int] = None):
         self.balance = balance
         self.nft_ids = nft_ids if nft_ids is not None else set()
-        self.last_positive_balance_update_block = 0
-        self.last_negative_balance_update_block = 0
+        self.last_positive_balance_update_day = ""
+        self.last_negative_balance_update_day = ""
 
 
-def process_transfer_event(event, user_state) -> UserState:
+def process_transfer_event(event, user_state, today) -> UserState:
     value = event["args"]["value"]
     from_addr = event["args"]["from"].lower()
     to_addr = event["args"]["to"].lower()
@@ -20,10 +20,10 @@ def process_transfer_event(event, user_state) -> UserState:
         user_state[from_addr].balance -= value
         if user_state[from_addr].balance < 0:
             raise ValueError(f"Balance of {from_addr} is negative: {user_state[from_addr].balance}")
-        user_state[from_addr].last_negative_balance_update_block = event["blockNumber"]
+        user_state[from_addr].last_negative_balance_update_day = today
     if to_addr != ZERO_ADDRESS:
         user_state[to_addr].balance += value
-        user_state[to_addr].last_positive_balance_update_block = event["blockNumber"]
+        user_state[to_addr].last_positive_balance_update_day = today
     return user_state
 
 
@@ -42,9 +42,9 @@ def process_nft_event(event, user_state) -> UserState:
     return user_state
 
 
-def process_event_above_user_state(event, user_state) -> UserState:
+def process_event_above_user_state(event, user_state, today) -> UserState:
     if event["event_type"] == EventType.TRANSFER:
-        return process_transfer_event(event, user_state)
+        return process_transfer_event(event, user_state, today)
     elif event["event_type"] == EventType.NFT:
         return process_nft_event(event, user_state)
     else:

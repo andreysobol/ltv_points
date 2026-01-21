@@ -14,14 +14,14 @@ from .utils.get_additional_data import (
     get_end_block_for_day,
     get_day_date,
 )
+from datetime import datetime
 
 ZERO_ADDRESS = "0x" + "0" * 40
 
 POINTS_PER_PILOT_VAULT_TOKEN = 1500
 POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT = (142 * 1500) // 100  # 1.42
 
-lp_balances_snapshot = {}
-lp_balances_snapshot_start_block = 0
+LP_PROGRAM_DURATION_DAYS = 90
 
 type Points = int
 
@@ -35,11 +35,11 @@ def get_user_state(filename, state_key):
         user_state[address.lower()].nft_ids = set(nft)
     for address, state in state["pilot_vault"][state_key].items():
         user_state[address.lower()].balance = state["balance"]
-        user_state[address.lower()].last_positive_balance_update_block = state[
-            "last_positive_balance_update_block"
+        user_state[address.lower()].last_positive_balance_update_day = state[
+            "last_positive_balance_update_day"
         ]
-        user_state[address.lower()].last_negative_balance_update_block = state[
-            "last_negative_balance_update_block"
+        user_state[address.lower()].last_negative_balance_update_day = state[
+            "last_negative_balance_update_day"
         ]
     return user_state
 
@@ -49,21 +49,107 @@ def get_user_state_at_day(day_index, state_key):
     return get_user_state(state_file, state_key)
 
 
-def give_points_for_user_state(user_state, points) -> Dict[str, Points]:
-    for address, user_state in user_state.items():
-        balance_excluding_snapshot = max(
-            0, user_state.balance - lp_balances_snapshot[address].balance
-        )
-        if len(user_state.nft_ids) == 0:
-            points[address.lower()] += (
-                balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN
-            )
-        else:
-            points[address.lower()] += (
-                balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT
-            )
-    return points
+class DailyPointsProcessor:
+    def __init__(
+        self,
+        lp_balances_snapshot: Dict[str, UserState],
+        lp_balances_snapshot_start_block: int,
+    ):
+        self.lp_balances_snapshot = lp_balances_snapshot
+        self.lp_balances_snapshot_start_block = lp_balances_snapshot_start_block
 
+    def get_balance_excluding_snapshot(self, address, user_state, date_unparsed) -> int:
+        if address not in self.lp_balances_snapshot.keys():
+            return user_state.balance
+
+        snapshot_entering_day_unparsed = self.lp_balances_snapshot[
+            address
+        ].last_positive_balance_update_day
+
+        if snapshot_entering_day_unparsed == "":
+            if self.lp_balances_snapshot[address].balance > 0:
+                raise ValueError(
+                    f"User {address} has balance {self.lp_balances_snapshot[address].balance} but no last positive balance update day"
+                )
+            return user_state.balance
+
+        snapshot_entering_day = datetime.fromisoformat(
+            snapshot_entering_day_unparsed
+        ).date()
+
+        date = datetime.fromisoformat(date_unparsed).date()
+
+        if (date - snapshot_entering_day).days > LP_PROGRAM_DURATION_DAYS:
+            return user_state.balance
+        return max(0, user_state.balance - self.lp_balances_snapshot[address].balance)
+
+    def give_points_for_user_state(self, user_state, points, date) -> Dict[str, Points]:
+        for address, user_state in user_state.items():
+            balance_excluding_snapshot = self.get_balance_excluding_snapshot(
+                address, user_state, date
+            )
+            if len(user_state.nft_ids) == 0:
+                points[address.lower()] += (
+                    balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN
+                )
+            else:
+                points[address.lower()] += (
+                    balance_excluding_snapshot * POINTS_PER_PILOT_VAULT_TOKEN_FOR_NFT
+                )
+        return points
+
+    def get_points(self, day_index) -> Dict[str, Points]:
+        start_block = get_start_block_for_day(day_index)
+        end_block = get_end_block_for_day(day_index)
+        block_number_to_events = read_combined_sorted_events(day_index)
+        user_state = get_user_state_at_day(day_index, "start_state")
+        date = get_day_date(day_index)
+
+        points: Dict[str, Points] = defaultdict(int)
+
+        for block_number in range(start_block, end_block + 1):
+            events = block_number_to_events[block_number]
+            for event in events:
+                user_state = process_event_above_user_state(event, user_state, date)
+            if block_number > self.lp_balances_snapshot_start_block:
+                points = self.give_points_for_user_state(user_state, points, date)
+
+        validate_end_state(day_index, user_state)
+        return points
+
+    def process_points(self) -> List[Dict]:
+        """Process points for all days and return results as a list of dictionaries."""
+        days_amount = get_days_amount()
+        results = []
+
+        for day_index in range(days_amount):
+            points = self.get_points(day_index)
+            path = f"data/points/{day_index}.json"
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+
+            points = {
+                address.lower(): points
+                for address, points in points.items()
+                if points > 0
+            }
+
+            result = {
+                "day_index": day_index,
+                "date": get_day_date(day_index),
+                "start_block": get_start_block_for_day(day_index),
+                "end_block": get_end_block_for_day(day_index),
+                "points": points,
+            }
+
+            json.dump(
+                result,
+                open(path, "w"),
+                indent=2,
+            )
+
+            results.append(result)
+
+        return results
 
 def validate_end_state(day_index, result_user_balances):
     cached_user_balances = get_user_state_at_day(day_index, "end_state")
@@ -72,7 +158,10 @@ def validate_end_state(day_index, result_user_balances):
         [
             [address.lower(), balance]
             for address, balance in result_user_balances.items()
-            if balance.balance > 0 or len(balance.nft_ids) > 0
+            if balance.balance > 0
+            or balance.last_negative_balance_update_day != ""
+            or balance.last_positive_balance_update_day != ""
+            or len(balance.nft_ids) > 0
         ]
     )
     cached_user_balances_items = sorted(list(cached_user_balances.items()))
@@ -94,67 +183,29 @@ def validate_end_state(day_index, result_user_balances):
             result_user_balance[1].nft_ids == cached_user_balance[1].nft_ids
         ), f"User NFT IDs mismatch: {result_user_balance[1].nft_ids} != {cached_user_balance[1].nft_ids}"
         assert (
-            result_user_balance[1].last_positive_balance_update_block
-            == cached_user_balance[1].last_positive_balance_update_block
-        ), f"User last positive balance update block mismatch: {result_user_balance[1].last_positive_balance_update_block} != {cached_user_balance[1].last_positive_balance_update_block}"
+            result_user_balance[1].last_positive_balance_update_day
+            == cached_user_balance[1].last_positive_balance_update_day
+        ), f"User last positive balance update day mismatch: {result_user_balance[1].last_positive_balance_update_day} != {cached_user_balance[1].last_positive_balance_update_day}"
         assert (
-            result_user_balance[1].last_negative_balance_update_block
-            == cached_user_balance[1].last_negative_balance_update_block
-        ), f"User last negative balance update block mismatch: {result_user_balance[1].last_negative_balance_update_block} != {cached_user_balance[1].last_negative_balance_update_block}"
+            result_user_balance[1].last_negative_balance_update_day
+            == cached_user_balance[1].last_negative_balance_update_day
+        ), f"User last negative balance update day mismatch: {result_user_balance[1].last_negative_balance_update_day} != {cached_user_balance[1].last_negative_balance_update_day}"
     print(f"Verified end state for day {day_index}")
 
 
-def get_points(day_index) -> Dict[str, Points]:
-    start_block = get_start_block_for_day(day_index)
-    end_block = get_end_block_for_day(day_index)
-    block_number_to_events = read_combined_sorted_events(day_index)
-    user_state = get_user_state_at_day(day_index, "start_state")
-
-    points: Dict[str, Points] = defaultdict(int)
-
-    for block_number in range(start_block, end_block + 1):
-        events = block_number_to_events[block_number]
-        for event in events:
-            user_state = process_event_above_user_state(event, user_state)
-        if block_number > lp_balances_snapshot_start_block:
-            points = give_points_for_user_state(user_state, points)
-
-    validate_end_state(day_index, user_state)
-    return points
-
-
-def process_points():
-    days_amount = get_days_amount()
-    for day_index in range(days_amount):
-        points = get_points(day_index)
-        path = f"data/points/{day_index}.json"
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-
-        points = {
-            address.lower(): points for address, points in points.items() if points > 0
-        }
-        json.dump(
-            {
-                "day_index": day_index,
-                "date": get_day_date(day_index),
-                "start_block": get_start_block_for_day(day_index),
-                "end_block": get_end_block_for_day(day_index),
-                "points": points,
-            },
-            open(path, "w"),
-            indent=2,
-        )
-
-
-def initialize_global_variables_and_process_points():
-    global lp_balances_snapshot, lp_balances_snapshot_start_block
+def load_lp_balances_snapshot_data():
+    """Load LP balances snapshot data from file and return as tuple (snapshot, start_block)."""
     lp_balances_snapshot_data_dir = "data/lp_balances_snapshot.json"
     lp_balances_snapshot = get_user_state(lp_balances_snapshot_data_dir, "start_state")
     lp_balances_snapshot_start_block = json.load(
         open(lp_balances_snapshot_data_dir, "r")
     )["start_block"]
-    process_points()
+    return lp_balances_snapshot, lp_balances_snapshot_start_block
 
+def process_points():
+    lp_balances_snapshot, lp_balances_snapshot_start_block = load_lp_balances_snapshot_data()
+    processor = DailyPointsProcessor(lp_balances_snapshot, lp_balances_snapshot_start_block)
+    processor.process_points()    
 
 if __name__ == "__main__":
-    initialize_global_variables_and_process_points()
+    process_points()
